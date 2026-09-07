@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Latihan Esei Tahun 4</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1f2937;--muted:#6b7280;--line:#d1d5db;--accent:#2563eb;--accent-soft:#e8f0ff;--ok:#15803d;--bad:#b91c1c;--shadow:0 8px 26px rgba(17,24,39,.08);--radius:18px}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,textarea,select{font:inherit} button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1180px;margin:auto;padding:14px 18px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}.brand-badge{width:38px;height:38px;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:20px}
+.mode-switch{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 14px;border-radius:12px;font-weight:700}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.soft{background:var(--accent-soft);border-color:#bfd1ff;color:#174ea6}.btn.good{background:#ecfdf3;border-color:#bbf7d0;color:#166534}.btn.danger{background:#fff1f2;border-color:#fecdd3;color:#9f1239}
+.container{max-width:1180px;margin:0 auto;padding:24px 18px 64px}.hero{background:linear-gradient(135deg,#fff,#f3f7ff);border:1px solid #dbe4ff;border-radius:24px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:clamp(28px,4vw,42px)}.hero p{margin:0;color:var(--muted);max-width:820px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}.card{grid-column:span 12;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}.card h2,.card h3{margin-top:0}
+.teacher{display:none}body.teacher-mode .teacher{display:block}body.teacher-mode .student{display:none}
+.label{display:block;font-weight:800;margin:10px 0 7px}input[type="text"],textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;color:var(--ink);outline:none}textarea{min-height:160px;resize:vertical;line-height:1.6}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.small{font-size:13px;color:var(--muted)}
+  .zh-help{font-size:13px;color:#64748b;font-weight:600}.note{padding:12px 14px;border-radius:12px;background:#f9fafb;border:1px dashed #cbd5e1;color:#475569;line-height:1.55}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 8px}.tab{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px;font-weight:800}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}.exercise-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.pill{padding:6px 10px;border-radius:999px;background:#f1f5f9;color:#475569;font-size:13px;font-weight:800}
+.paragraph{border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin:12px 0;line-height:1.9;background:#fff}.paragraph.indent{padding-left:34px}
+.blank{
+  display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;
+  min-width:135px;min-height:34px;padding:3px 9px;margin:2px 4px;
+  border:2px dashed #64748b;border-radius:9px;background:#f8fafc;
+  text-align:center;color:#111827;font-weight:800;transition:.15s ease
+}
+.blank.drop-hover{border-color:#2563eb;background:#eaf2ff;transform:scale(1.02)}
+.blank.filled{border-style:solid;border-color:#93c5fd;background:#eff6ff}
+.answer-bank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:1px solid #dbeafe;background:#f8fbff;border-radius:14px}
+.answer-chip{
+  padding:9px 11px;border:1px solid #bfd1ff;background:#fff;border-radius:10px;
+  font-weight:700;cursor:grab;user-select:none;touch-action:manipulation;transition:.15s ease
+}
+.answer-chip:active{cursor:grabbing;transform:scale(.98)}
+.answer-chip.dragging{opacity:.5}
+.answer-chip.used{opacity:.38;background:#f1f5f9;border-style:dashed}
+.answer-chip.selected{outline:3px solid #93c5fd;background:#eff6ff}
+
+.sentence-list{display:grid;gap:10px}.sentence{border:1px solid var(--line);padding:12px 14px;border-radius:12px;background:#fff;display:flex;align-items:flex-start;gap:10px}.sentence.dragging{opacity:.45}.handle{user-select:none;color:#64748b;font-weight:900;padding-top:2px}.num{min-width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:#eef2ff;color:#3730a3;font-weight:900}
+.keyword-box{padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px dashed #cbd5e1;margin:10px 0}.keyword-box b{display:block;margin-bottom:6px}.writing-area{width:100%;min-height:260px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,#d1d5db 32px);line-height:32px;padding:0 10px;border:1px solid var(--line);border-radius:14px;resize:vertical}.status{margin-top:12px;padding:10px 12px;border-radius:12px;display:none;font-weight:800}.status.show{display:block}.status.ok{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}.status.bad{background:#fff1f2;color:#9f1239;border:1px solid #fecdd3}
+.library{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}.essay-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.essay-card h3{margin:0 0 8px}.essay-card p{margin:0 0 12px;color:var(--muted);font-size:14px}.scorebox{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.scoreitem{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-align:center}.scoreitem strong{font-size:20px;display:block}
+.student-profile{
+  margin:14px 0 18px;padding:14px;border:1px solid #cbd5e1;border-radius:16px;
+  background:linear-gradient(135deg,#f8fbff,#fff)
+}
+.student-profile-grid{
+  display:grid;grid-template-columns:minmax(180px,1fr) auto;gap:10px;align-items:end
+}
+.student-name-status{font-size:13px;color:#64748b;margin-top:6px}
+.grade-panel{
+  margin-top:14px;border:1px solid #cbd5e1;border-radius:16px;padding:14px;background:#fff
+}
+.grade-total{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px
+}
+.grade-circle{
+  width:86px;height:86px;border-radius:50%;display:grid;place-items:center;
+  background:#eef4ff;border:8px solid #dbeafe;font-weight:900;font-size:24px;color:#174ea6
+}
+.grade-summary h3{margin:0 0 4px}
+.rubric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px}
+.rubric-item{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#f8fafc}
+.rubric-item strong{display:block;font-size:18px;margin-bottom:3px}
+.feedback-list{margin:12px 0 0;padding-left:20px;line-height:1.6}
+.result-table-wrap{overflow:auto}
+.result-table{width:100%;border-collapse:collapse;font-size:14px}
+.result-table th,.result-table td{border-bottom:1px solid #e5e7eb;padding:9px 8px;text-align:left;white-space:nowrap}
+.result-table th{background:#f8fafc}
+.grade-btn{background:#0f766e!important;border-color:#0f766e!important;color:white!important}
+@media(max-width:620px){
+  .student-profile-grid{grid-template-columns:1fr}
+}
+
+.footer-note{text-align:center;color:#94a3b8;font-size:13px;margin-top:30px}
+  .image-upload-box{
+    border:1px dashed #b7c5d8;border-radius:14px;padding:12px;background:#f8fbff;margin-top:8px
+  }
+  .image-upload-box input[type="file"]{width:100%}
+  .image-preview{
+    margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:8px;background:#fff
+  }
+  .image-preview img{
+    display:block;max-width:100%;max-height:280px;margin:auto;object-fit:contain;border-radius:10px
+  }
+  .essay-image-wrap{
+    margin:14px 0 16px;border:1px solid var(--line);border-radius:16px;padding:10px;background:#fff;
+    text-align:center
+  }
+  .essay-image-wrap img{
+    display:block;width:auto;max-width:100%;max-height:440px;margin:auto;object-fit:contain;border-radius:10px
+  }
+  .thumb{
+    width:100%;height:110px;object-fit:cover;border-radius:10px;border:1px solid #e5e7eb;margin-bottom:10px
+  }
+
+  .hidden{display:none!important}
+@media(min-width:900px){.span-5{grid-column:span 5}.span-7{grid-column:span 7}.span-6{grid-column:span 6}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><div class="brand"><div class="brand-badge">✍️</div><div><div>Latihan Esei Tahun 4</div><div class="small">Isi → Penerangan → Contoh</div></div></div><div class="mode-switch"><button class="btn primary" id="studentModeBtn">Mod Murid</button><button class="btn" id="teacherModeBtn">Mod Guru</button></div></div></header>
+<main class="container">
+<section class="hero student"><h1>Belajar menulis esei langkah demi langkah</h1><p>Pilih tajuk dan tahap kesukaran. Mulakan dengan isi tempat kosong, susun ayat, bina perenggan menggunakan kata kunci, kemudian cuba menulis sendiri.<br><span class="small">选择题目和难度，从填空、排列句子、关键词写作开始，最后尝试独立完成作文。</span></p></section>
+<section class="grid teacher">
+<div class="card span-5"><h2>Bina latihan daripada esei</h2><label class="label">Tajuk esei</label><input type="text" id="essayTitle" placeholder="Contoh: Sambutan Hari Ibu"/><label class="label">Esei</label><textarea id="essayInput" placeholder="Gunakan **perkataan atau frasa tebal** untuk menentukan tempat kosong.\n\nPisahkan setiap perenggan dengan satu baris kosong."></textarea>
+<label class="label">Grafik / Imej Esei</label>
+<div class="image-upload-box">
+  <input type="file" id="essayImageInput" accept="image/png,image/jpeg,image/webp,image/gif" />
+  <div class="small" style="margin-top:6px">Muat naik satu grafik yang berkaitan dengan esei. 图片将显示在学生练习上方。</div>
+  <div id="essayImagePreview" class="image-preview hidden">
+    <img id="essayImagePreviewImg" alt="Pratonton grafik esei">
+    <div class="row" style="margin-top:8px">
+      <button type="button" class="btn danger" id="removeImageBtn">Buang Imej 删除图片</button>
+    </div>
+  </div>
+</div>
+<div class="note"><b>Cara bina soalan:</b><br>Letakkan <b>**</b> sebelum dan selepas perkataan/frasa yang mahu dikosongkan. Contoh: Kami <b>**membuat kad ucapan**</b> untuk ibu.</div><div class="row" style="margin-top:12px"><button class="btn primary" id="buildBtn">Hasilkan Latihan</button><button class="btn soft" id="demoBtn">Muat Demo</button></div></div>
+<div class="card span-7"><h2>Tetapan latihan</h2><div class="row"><div><label class="label">Tema</label><input id="themeInput" type="text" placeholder="Contoh: Tema 1 – Harmoni Sentiasa"></div><div><label class="label">Panjang sasaran</label><select id="wordTarget"><option>80–100 patah perkataan</option><option>60–80 patah perkataan</option><option>100–120 patah perkataan</option></select></div></div><h3 style="margin-top:18px">Tahap automatik</h3><div class="note"><b>Tahap 1:</b> Isi tempat kosong berdasarkan frasa bertanda ** **.<br><b>Tahap 2:</b> Penanda wacana — pilih penanda yang sesuai untuk setiap perenggan.<br><b>Tahap 3:</b> Susun ayat secara seret dan lepas.<br><b>Tahap 4:</b> Guided writing menggunakan kata kunci setiap perenggan.<br><b>Tahap 5:</b> Tulis sendiri dengan kiraan perkataan, perenggan dan penanda wacana.</div><div class="row" style="margin-top:12px"><button class="btn good" id="saveEssayBtn">Simpan ke Peranti</button><button class="btn" id="exportBtn">Eksport JSON</button><label class="btn" style="text-align:center">Import JSON<input id="importInput" type="file" accept=".json" hidden></label></div></div>
+</section>
+<section class="card student">
+<div class="student-profile">
+  <div class="student-profile-grid">
+    <div>
+      <label class="label" style="margin-top:0">Nama Murid 学生姓名</label>
+      <input id="studentNameInput" type="text" autocomplete="name" placeholder="Masukkan nama / 输入姓名">
+      <div id="studentNameStatus" class="student-name-status">Nama akan disimpan pada peranti ini. 姓名会保存在此设备。</div>
+    </div>
+    <button class="btn soft" id="saveStudentNameBtn">Simpan Nama 保存姓名</button>
+  </div>
+</div>
+<div class="exercise-head"><div><div class="pill" id="themePill">Tema</div><h2 id="studentTitle" style="margin:8px 0 4px">Pilih latihan</h2><div class="small" id="targetText">80–100 patah perkataan</div></div><select id="essaySelect" style="max-width:360px"></select></div><div class="tabs" id="levelTabs"><button class="tab active" data-level="1">Tahap 1 · Isi Tempat Kosong 填空</button><button class="tab" data-level="2">Tahap 2 · Penanda Wacana 连接词</button><button class="tab" data-level="3">Tahap 3 · Susun Ayat 排列句子</button><button class="tab" data-level="4">Tahap 4 · Guided Writing 引导写作</button><button class="tab" data-level="5">Tahap 5 · Tulis Sendiri 独立写作</button></div><div id="exerciseArea"></div></section>
+<section class="card teacher">
+  <h2>Senarai latihan tersimpan</h2>
+  <div id="teacherLibrary" class="library"></div>
+</section>
+<section class="card teacher">
+  <div class="exercise-head">
+    <div>
+      <h2 style="margin-bottom:4px">Rekod Markah Murid</h2>
+      <div class="small">Rekod pada peranti ini sahaja. 可查看此设备上的作答记录。</div>
+    </div>
+    <div class="row" style="flex:0 0 auto">
+      <button class="btn" id="exportResultsBtn">Eksport CSV</button>
+      <button class="btn danger" id="clearResultsBtn">Padam Rekod</button>
+    </div>
+  </div>
+  <div id="resultsTable" class="result-table-wrap" style="margin-top:12px"></div>
+</section>
+<div class="footer-note">Latihan, nama dan markah disimpan pada pelayar peranti ini. Untuk kutipan markah kelas secara langsung, sambungkan pangkalan data awan.</div>
+</main>
+<script>
+const STORAGE_KEY='esei_t4_library_v1';
+const RESULT_KEY='esei_t4_results_v1';
+const STUDENT_NAME_KEY='esei_t4_student_name_v1';
+let library=[],currentLevel=1,currentId=null,pendingImageData='',results=[];
+function uid(){return'e_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function escapeHtml(str=''){return str.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+
+
+function getStudentName(){
+  return (document.getElementById('studentNameInput')?.value||localStorage.getItem(STUDENT_NAME_KEY)||'').trim();
+}
+function requireStudentName(){
+  const name=getStudentName();
+  if(name)return name;
+  const input=document.getElementById('studentNameInput');
+  if(input){input.focus();input.style.borderColor='#b91c1c';}
+  alert('Sila masukkan nama murid terlebih dahulu. 请输入学生姓名。');
+  return '';
+}
+function loadResults(){
+  try{results=JSON.parse(localStorage.getItem(RESULT_KEY)||'[]');}
+  catch{results=[];}
+}
+function persistResults(){
+  localStorage.setItem(RESULT_KEY,JSON.stringify(results));
+}
+function parseTargetRange(target='80–100 patah perkataan'){
+  const nums=(target.match(/\d+/g)||[]).map(Number);
+  if(nums.length>=2)return [nums[0],nums[1]];
+  if(nums.length===1)return [Math.max(0,nums[0]-10),nums[0]+10];
+  return [80,100];
+}
+function normalizeText(s=''){
+  return s.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^\p{L}\p{N}\s]/gu,' ')
+    .replace(/\s+/g,' ').trim();
+}
+function keyPhrasesFromModel(ex){
+  const bold=[...ex.text.matchAll(/\*\*(.+?)\*\*/g)].map(m=>m[1].trim());
+  if(bold.length)return bold;
+  return paragraphsFromEssay(ex.text)
+    .slice(1,-1)
+    .flatMap(p=>keywordizeParagraph(p))
+    .filter(x=>x.split(/\s+/).length>=2)
+    .slice(0,8);
+}
+function phraseCoverage(ex,text){
+  const phrases=keyPhrasesFromModel(ex);
+  if(!phrases.length)return {score:20,hit:0,total:0};
+  const low=normalizeText(text);
+  let hit=0;
+  phrases.forEach(p=>{
+    const words=normalizeText(p).split(' ').filter(w=>w.length>2);
+    const threshold=Math.max(1,Math.ceil(words.length*.55));
+    const matched=words.filter(w=>low.includes(w)).length;
+    if(matched>=threshold)hit++;
+  });
+  return {score:Math.round(20*hit/phrases.length),hit,total:phrases.length};
+}
+function languageBasicsScore(text){
+  const trimmed=text.trim();
+  if(!trimmed)return 0;
+  const sentences=trimmed.split(/[.!?]+/).map(x=>x.trim()).filter(Boolean);
+  let score=0;
+  const firstChar=trimmed.match(/[A-Za-zÀ-ž]/)?.[0];
+  if(firstChar && firstChar===firstChar.toUpperCase())score+=4;
+  const ended=(/[.!?]\s*$/.test(trimmed));
+  if(ended)score+=4;
+  if(sentences.length>=6)score+=4;
+  const caps=sentences.filter(s=>/^[A-ZÀ-Ž]/.test(s)).length;
+  if(sentences.length && caps/sentences.length>=.7)score+=4;
+  const punctuation=(trimmed.match(/[,.!?]/g)||[]).length;
+  if(punctuation>=Math.max(5,Math.floor(sentences.length*.8)))score+=4;
+  return Math.min(20,score);
+}
+function gradeEssay(ex,text,mode){
+  const words=countWords(text);
+  const paras=text.trim()?text.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean).length:0;
+  const links=countLinks(text);
+  const [minW,maxW]=parseTargetRange(ex.target);
+
+  let lengthScore=20;
+  if(words<minW){
+    const ratio=words/Math.max(1,minW);
+    lengthScore=Math.max(0,Math.round(20*ratio));
+  }else if(words>maxW){
+    const over=(words-maxW)/Math.max(1,maxW);
+    lengthScore=Math.max(8,Math.round(20*(1-Math.min(.6,over))));
+  }
+
+  // Guided writing accepts 4 paragraphs; independent writing expects 5.
+  const targetParas=mode==='guided'?4:5;
+  const structureScore=Math.min(20,Math.round(20*Math.min(paras,targetParas)/targetParas));
+  const linkTarget=mode==='guided'?3:4;
+  const discourseScore=Math.min(20,Math.round(20*Math.min(links,linkTarget)/linkTarget));
+  const content=phraseCoverage(ex,text);
+  const languageScore=languageBasicsScore(text);
+
+  const total=Math.round(lengthScore+structureScore+discourseScore+content.score+languageScore);
+  const band=total>=85?'Cemerlang 优秀':total>=70?'Baik 良好':total>=55?'Memuaskan 尚可':'Perlu Bimbingan 需要辅导';
+
+  const feedback=[];
+  if(words<minW)feedback.push(`Tambah isi. Sasaran ${minW}–${maxW} patah perkataan.`);
+  else if(words>maxW)feedback.push(`Ringkaskan sedikit. Sasaran ${minW}–${maxW} patah perkataan.`);
+  else feedback.push('Panjang karangan menepati sasaran.');
+
+  if(paras<targetParas)feedback.push(`Asingkan idea kepada sekurang-kurangnya ${targetParas} perenggan.`);
+  else feedback.push('Pembahagian perenggan baik.');
+
+  if(links<linkTarget)feedback.push('Gunakan lebih banyak penanda wacana yang sesuai.');
+  else feedback.push('Penanda wacana digunakan dengan baik.');
+
+  if(content.total && content.hit<Math.ceil(content.total*.6))
+    feedback.push('Masukkan lebih banyak isi penting daripada grafik atau kata kunci.');
+  else feedback.push('Isi utama dapat dikembangkan.');
+
+  if(languageScore<12)feedback.push('Semak huruf besar dan tanda baca.');
+
+  return {
+    total,band,words,paras,links,
+    rubric:{
+      'Panjang karangan':lengthScore,
+      'Struktur perenggan':structureScore,
+      'Penanda wacana':discourseScore,
+      'Isi penting':content.score,
+      'Bahasa asas':languageScore
+    },
+    feedback
+  };
+}
+function gradePanelHtml(g){
+  return `<div class="grade-panel">
+    <div class="grade-total">
+      <div class="grade-circle">${g.total}<span style="font-size:13px">/100</span></div>
+      <div class="grade-summary">
+        <h3>${g.band}</h3>
+        <div class="small">${g.words} patah perkataan · ${g.paras} perenggan · ${g.links} penanda wacana</div>
+        <div class="small">这是自动结构评分，用于练习与即时反馈。</div>
+      </div>
+    </div>
+    <div class="rubric-grid">
+      ${Object.entries(g.rubric).map(([k,v])=>`<div class="rubric-item"><strong>${v}/20</strong>${k}</div>`).join('')}
+    </div>
+    <ul class="feedback-list">${g.feedback.map(f=>`<li>${escapeHtml(f)}</li>`).join('')}</ul>
+  </div>`;
+}
+function saveWritingResult(ex,mode,text,grade){
+  const name=requireStudentName();
+  if(!name)return false;
+  const record={
+    id:'r_'+Date.now().toString(36),
+    name,
+    essayId:ex.id,
+    title:ex.title,
+    mode:mode==='guided'?'Guided Writing':'Tulis Sendiri',
+    score:grade.total,
+    words:grade.words,
+    text,
+    createdAt:new Date().toISOString()
+  };
+  results.unshift(record);
+  if(results.length>300)results=results.slice(0,300);
+  persistResults();
+  renderResults();
+  return true;
+}
+function renderResults(){
+  const box=document.getElementById('resultsTable');
+  if(!box)return;
+  if(!results.length){
+    box.innerHTML='<div class="note">Belum ada rekod markah.</div>';
+    return;
+  }
+  box.innerHTML=`<table class="result-table">
+    <thead><tr><th>Murid</th><th>Latihan</th><th>Mod</th><th>Markah</th><th>Perkataan</th><th>Masa</th></tr></thead>
+    <tbody>${results.map(r=>`<tr>
+      <td>${escapeHtml(r.name)}</td>
+      <td>${escapeHtml(r.title)}</td>
+      <td>${escapeHtml(r.mode)}</td>
+      <td><b>${r.score}/100</b></td>
+      <td>${r.words}</td>
+      <td>${new Date(r.createdAt).toLocaleString('ms-MY')}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+function csvEscape(v){
+  const s=String(v??'');
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+
+function essayImageHtml(ex){
+  if(!ex||!ex.image)return'';
+  return `<div class="essay-image-wrap"><img src="${ex.image}" alt="Grafik esei"></div>`;
+}
+function setImagePreview(data){
+  pendingImageData=data||'';
+  const wrap=document.getElementById('essayImagePreview');
+  const img=document.getElementById('essayImagePreviewImg');
+  if(!wrap||!img)return;
+  if(pendingImageData){
+    img.src=pendingImageData;
+    wrap.classList.remove('hidden');
+  }else{
+    img.removeAttribute('src');
+    wrap.classList.add('hidden');
+  }
+}
+function resizeImageFile(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const im=new Image();
+      im.onload=()=>{
+        const maxSide=1400;
+        let w=im.width,h=im.height;
+        if(Math.max(w,h)>maxSide){
+          const s=maxSide/Math.max(w,h);
+          w=Math.round(w*s); h=Math.round(h*s);
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=w; canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h);
+        ctx.drawImage(im,0,0,w,h);
+        try{
+          resolve(canvas.toDataURL('image/webp',0.88));
+        }catch{
+          resolve(canvas.toDataURL('image/jpeg',0.9));
+        }
+      };
+      im.onerror=reject;
+      im.src=reader.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function parseBold(text){const answers=[];const html=escapeHtml(text).replace(/\*\*(.+?)\*\*/g,(_,a)=>{answers.push(a);return`<span class="blank" data-answer="${escapeHtml(a)}"></span>`});return{html,answers}}
+function stripMarkdown(text){return text.replace(/\*\*(.+?)\*\*/g,'$1')}
+function sentencesFromEssay(text){const plain=stripMarkdown(text).replace(/\n+/g,' ');return plain.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map(s=>s.trim()).filter(Boolean)||[]}
+function paragraphsFromEssay(text){return text.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean)}
+const PENANDA_WACANA=['Pertama sekali','Mula-mula','Pertama','Antara aktivitinya ialah','Seterusnya','Kemudian','Selepas itu','Selain itu','Di samping itu','Akhir sekali','Akhirnya','Kesimpulannya'];
+function getPenandaData(text){
+  const pars=paragraphsFromEssay(text).map(stripMarkdown);
+  const ordered=[...PENANDA_WACANA].sort((a,b)=>b.length-a.length);
+  const escaped=ordered.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+  const re=new RegExp('^\\s*('+escaped+')(,)?\\s*','i');
+  return pars.map((p,i)=>{
+    const m=p.match(re);
+    if(!m)return{paragraph:p,index:i,answer:null,comma:false,rest:p};
+    return{paragraph:p,index:i,answer:m[1],comma:!!m[2],rest:p.slice(m[0].length)};
+  });
+}
+function keywordizeParagraph(p){const clean=stripMarkdown(p);const bold=[...p.matchAll(/\*\*(.+?)\*\*/g)].map(m=>m[1]);if(bold.length)return bold;const parts=clean.split(/[,.!?;:]+/).map(x=>x.trim()).filter(Boolean);return parts.map(part=>{const w=part.split(/\s+/);return w.length<=7?part:w.slice(0,5).join(' ')}).slice(0,5)}
+function loadLibrary(){try{library=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{library=[]}if(!library.length){library=[{id:uid(),title:'Sambutan Hari Ibu',theme:'Tema 1 – Harmoni Sentiasa',target:'80–100 patah perkataan',text:`Pada hari Ahad yang lalu, keluarga saya **menyambut Hari Ibu** di rumah. Kami berasa sangat gembira kerana dapat meraikannya bersama-sama.\n\nMula-mula, saya dan adik **membuat kad ucapan** sebagai tanda kasih sayang. Kami **menghias kad itu dengan cantik** sebelum memberikannya kepada ibu.\n\nSeterusnya, kami **menyediakan sarapan** untuk menggembirakan ibu. Saya **membantu ayah menyediakan makanan** dan menyusunnya di atas meja.\n\nSelain itu, kami **memberikan hadiah** kepada ibu serta mengucapkan terima kasih atas segala jasanya. Kami **memeluk ibu dengan penuh kasih sayang**.\n\nKesimpulannya, kami berasa sangat gembira kerana dapat membalas jasa ibu. Sambutan itu **menjadi kenangan manis buat keluarga kami**.`}];persist()}currentId=library[0]?.id||null;
+  loadResults();
+  renderAll();
+  const savedName=localStorage.getItem(STUDENT_NAME_KEY)||'';
+  const nameInput=document.getElementById('studentNameInput');
+  if(nameInput)nameInput.value=savedName;
+  renderResults()
+}
+function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(library))}
+function currentEssay(){return library.find(x=>x.id===currentId)||library[0]}
+function renderAll(){renderSelect();renderTeacherLibrary();renderExercise()}
+function renderSelect(){const sel=document.getElementById('essaySelect');sel.innerHTML=library.map(x=>`<option value="${x.id}" ${x.id===currentId?'selected':''}>${escapeHtml(x.title)}</option>`).join('')}
+function renderTeacherLibrary(){const box=document.getElementById('teacherLibrary');if(!library.length){box.innerHTML='<div class="note">Belum ada latihan.</div>';return}box.innerHTML=library.map(x=>`<div class="essay-card">${x.image?`<img class="thumb" src="${x.image}" alt="Grafik ${escapeHtml(x.title)}">`:''}<h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.theme||'Tanpa tema')} · ${escapeHtml(x.target||'')}</p><div class="row"><button class="btn soft" onclick="editEssay('${x.id}')">Edit</button><button class="btn danger" onclick="removeEssay('${x.id}')">Padam</button></div></div>`).join('')}
+function renderExercise(){const ex=currentEssay(),area=document.getElementById('exerciseArea');if(!ex){area.innerHTML='<div class="note">Tiada latihan.</div>';return}document.getElementById('studentTitle').textContent=ex.title;document.getElementById('themePill').textContent=ex.theme||'Latihan Esei';document.getElementById('targetText').textContent=ex.target||'';if(currentLevel===1)renderFillBlank(ex,area);if(currentLevel===2)renderPenandaWacana(ex,area);if(currentLevel===3)renderRearrange(ex,area);if(currentLevel===4)renderGuided(ex,area);if(currentLevel===5)renderIndependent(ex,area)}
+function renderFillBlank(ex,area){
+  const pars=paragraphsFromEssay(ex.text);
+  let all=[];
+  const ph=pars.map((p,i)=>{
+    const r=parseBold(p);
+    all.push(...r.answers);
+    return `<div class="paragraph ${i>0?'indent':''}">${r.html}</div>`;
+  }).join('');
+
+  const shuffled=[...all].sort(()=>Math.random()-.5);
+
+  area.innerHTML=`
+    <div class="note">
+      <b>Arahan:</b> Seret pilihan jawapan ke tempat kosong yang betul.
+      <br><span class="small">说明：把答案拖到正确的空格中。手机也可以先点答案，再点空格。</span>
+    </div>
+    ${essayImageHtml(ex)}
+    <h3>Pilihan Jawapan</h3>
+    <div class="answer-bank">
+      ${shuffled.map((a,i)=>`
+        <button type="button" class="answer-chip" draggable="true"
+          id="fillChip_${i}" data-word="${escapeHtml(a)}">${escapeHtml(a)}</button>
+      `).join('')}
+    </div>
+    <div class="small" style="margin:8px 0 2px">
+      💡 Seret jawapan ke ruang kosong. Klik dua kali pada jawapan dalam ruang kosong untuk mengosongkannya.
+      <br>双击已填答案可清除。
+    </div>
+    <div style="margin-top:10px">${ph}</div>
+    <div class="row">
+      <button class="btn primary" id="checkFill">Semak Jawapan</button>
+      <button class="btn" id="resetFill">Cuba Semula</button>
+    </div>
+    <div id="fillStatus" class="status"></div>
+  `;
+
+  const chips=[...area.querySelectorAll('.answer-chip')];
+  const blanks=[...area.querySelectorAll('.blank')];
+  let selectedChip=null;
+
+  blanks.forEach((b,i)=>{
+    b.id=`fillBlank_${i}`;
+    b.title='Seret jawapan ke sini';
+  });
+
+  function clearBlank(blank){
+    const oldChipId=blank.dataset.chipId;
+    if(oldChipId){
+      const oldChip=document.getElementById(oldChipId);
+      if(oldChip) oldChip.classList.remove('used');
+    }
+    blank.textContent='';
+    delete blank.dataset.filled;
+    delete blank.dataset.chipId;
+    blank.classList.remove('filled','drop-hover');
+    blank.style.borderColor='';
+  }
+
+  function placeChip(chip,blank){
+    if(!chip||!blank)return;
+
+    // If this blank already has a different answer, return that chip to the bank.
+    if(blank.dataset.chipId && blank.dataset.chipId!==chip.id){
+      const oldChip=document.getElementById(blank.dataset.chipId);
+      if(oldChip) oldChip.classList.remove('used');
+    }
+
+    // A single answer chip can only occupy one blank at a time.
+    blanks.forEach(other=>{
+      if(other!==blank && other.dataset.chipId===chip.id){
+        other.textContent='';
+        delete other.dataset.filled;
+        delete other.dataset.chipId;
+        other.classList.remove('filled','drop-hover');
+        other.style.borderColor='';
+      }
+    });
+
+    blank.textContent=chip.dataset.word;
+    blank.dataset.filled=chip.dataset.word;
+    blank.dataset.chipId=chip.id;
+    blank.classList.add('filled');
+    blank.classList.remove('drop-hover');
+    blank.style.borderColor='';
+    chip.classList.add('used');
+
+    selectedChip=null;
+    chips.forEach(x=>x.classList.remove('selected'));
+  }
+
+  chips.forEach(chip=>{
+    chip.addEventListener('dragstart',e=>{
+      selectedChip=chip;
+      chip.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',chip.id);
+    });
+    chip.addEventListener('dragend',()=>{
+      chip.classList.remove('dragging');
+      blanks.forEach(b=>b.classList.remove('drop-hover'));
+    });
+
+    // Tap/click fallback for phones and tablets.
+    chip.addEventListener('click',()=>{
+      selectedChip=chip;
+      chips.forEach(x=>x.classList.toggle('selected',x===chip));
+    });
+  });
+
+  blanks.forEach(blank=>{
+    blank.addEventListener('dragenter',e=>{
+      e.preventDefault();
+      blank.classList.add('drop-hover');
+    });
+    blank.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      blank.classList.add('drop-hover');
+    });
+    blank.addEventListener('dragleave',()=>{
+      blank.classList.remove('drop-hover');
+    });
+    blank.addEventListener('drop',e=>{
+      e.preventDefault();
+      blank.classList.remove('drop-hover');
+      const chipId=e.dataTransfer.getData('text/plain');
+      const chip=document.getElementById(chipId);
+      placeChip(chip,blank);
+    });
+
+    // Tap a blank after tapping an answer chip.
+    blank.addEventListener('click',()=>{
+      if(selectedChip) placeChip(selectedChip,blank);
+    });
+
+    blank.addEventListener('dblclick',()=>{
+      clearBlank(blank);
+    });
+  });
+
+  document.getElementById('checkFill').onclick=()=>{
+    let score=0;
+    blanks.forEach(b=>{
+      const ok=(b.dataset.filled||'')===b.dataset.answer;
+      b.style.borderColor=ok?'#15803d':'#b91c1c';
+      if(ok)score++;
+    });
+    const st=document.getElementById('fillStatus');
+    st.className='status show '+(score===blanks.length?'ok':'bad');
+    st.textContent=`Skor: ${score}/${blanks.length}`+
+      (score===blanks.length?' — Syabas! Semua jawapan betul.':' — Cuba pindahkan jawapan yang masih salah.');
+  };
+
+  document.getElementById('resetFill').onclick=()=>renderExercise();
+}
+function renderPenandaWacana(ex,area){
+  const data=getPenandaData(ex.text);
+  const tasks=data.filter(x=>x.answer);
+
+  if(!tasks.length){
+    area.innerHTML=`
+      <div class="note">
+        <b>Belum ada penanda wacana yang dapat dikesan.</b><br>
+        Gunakan penanda pada awal perenggan seperti <b>Mula-mula, Seterusnya, Selain itu</b> dan <b>Kesimpulannya</b> dalam esei guru.
+        <br><span class="small">作文段落开头可使用：Mula-mula、Seterusnya、Selain itu、Kesimpulannya。</span>
+      </div>`;
+    return;
+  }
+
+  // Keep one draggable chip for every required answer.
+  // This also supports essays that repeat the same discourse marker.
+  const requiredChoices=tasks.map(x=>x.answer);
+
+  // Add only a small number of distractors so the activity stays suitable for Year 4.
+  const uniqueRequired=[...new Set(requiredChoices.map(x=>x.toLowerCase()))];
+  const distractors=PENANDA_WACANA
+    .filter(x=>!uniqueRequired.includes(x.toLowerCase()))
+    .slice(0,Math.min(2,Math.max(1,6-requiredChoices.length)));
+
+  const choices=[...requiredChoices,...distractors].sort(()=>Math.random()-.5);
+
+  const html=data.map((x,i)=>{
+    if(!x.answer)return `<div class="paragraph">${escapeHtml(x.paragraph)}</div>`;
+    return `
+      <div class="paragraph ${i>0?'indent':''}">
+        <span class="blank pw-blank" data-answer="${escapeHtml(x.answer)}"></span>${x.comma?',':''}${x.rest?' '+escapeHtml(x.rest):''}
+      </div>`;
+  }).join('');
+
+  area.innerHTML=`
+    <div class="note">
+      <b>Arahan:</b> Seret penanda wacana ke tempat kosong yang betul.
+      <br><span class="small">说明：把合适的连接词拖到正确的空格中。手机也可以先点连接词，再点空格。</span>
+    </div>
+    ${essayImageHtml(ex)}
+    <h3>Pilihan Penanda Wacana</h3>
+    <div class="answer-bank">
+      ${choices.map((a,i)=>`
+        <button type="button" class="answer-chip pw-chip" draggable="true"
+          id="pwChip_${i}" data-word="${escapeHtml(a)}">${escapeHtml(a)}</button>
+      `).join('')}
+    </div>
+    <div class="small" style="margin:8px 0 2px">
+      💡 Seret penanda wacana ke ruang kosong. Klik dua kali pada jawapan dalam ruang kosong untuk mengosongkannya.
+      <br>双击已填答案可清除。
+    </div>
+    <div style="margin-top:10px">${html}</div>
+    <div class="row">
+      <button class="btn primary" id="checkPw">Semak Jawapan</button>
+      <button class="btn" id="resetPw">Cuba Semula</button>
+    </div>
+    <div id="pwStatus" class="status"></div>`;
+
+  const chips=[...area.querySelectorAll('.pw-chip')];
+  const blanks=[...area.querySelectorAll('.pw-blank')];
+  let selectedChip=null;
+
+  blanks.forEach((b,i)=>{
+    b.id=`pwBlank_${i}`;
+    b.title='Seret penanda wacana ke sini';
+  });
+
+  function clearBlank(blank){
+    const oldChipId=blank.dataset.chipId;
+    if(oldChipId){
+      const oldChip=document.getElementById(oldChipId);
+      if(oldChip)oldChip.classList.remove('used');
+    }
+    blank.textContent='';
+    delete blank.dataset.filled;
+    delete blank.dataset.chipId;
+    blank.classList.remove('filled','drop-hover');
+    blank.style.borderColor='';
+  }
+
+  function placeChip(chip,blank){
+    if(!chip||!blank)return;
+
+    // Return an answer already occupying this blank to the answer bank.
+    if(blank.dataset.chipId && blank.dataset.chipId!==chip.id){
+      const oldChip=document.getElementById(blank.dataset.chipId);
+      if(oldChip)oldChip.classList.remove('used');
+    }
+
+    // Each chip may occupy only one blank.
+    blanks.forEach(other=>{
+      if(other!==blank && other.dataset.chipId===chip.id){
+        other.textContent='';
+        delete other.dataset.filled;
+        delete other.dataset.chipId;
+        other.classList.remove('filled','drop-hover');
+        other.style.borderColor='';
+      }
+    });
+
+    blank.textContent=chip.dataset.word;
+    blank.dataset.filled=chip.dataset.word;
+    blank.dataset.chipId=chip.id;
+    blank.classList.add('filled');
+    blank.classList.remove('drop-hover');
+    blank.style.borderColor='';
+    chip.classList.add('used');
+
+    selectedChip=null;
+    chips.forEach(x=>x.classList.remove('selected'));
+  }
+
+  chips.forEach(chip=>{
+    chip.addEventListener('dragstart',e=>{
+      selectedChip=chip;
+      chip.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('text/plain',chip.id);
+    });
+
+    chip.addEventListener('dragend',()=>{
+      chip.classList.remove('dragging');
+      blanks.forEach(b=>b.classList.remove('drop-hover'));
+    });
+
+    // Mobile/tablet fallback: tap answer, then tap blank.
+    chip.addEventListener('click',()=>{
+      selectedChip=chip;
+      chips.forEach(x=>x.classList.toggle('selected',x===chip));
+    });
+  });
+
+  blanks.forEach(blank=>{
+    blank.addEventListener('dragenter',e=>{
+      e.preventDefault();
+      blank.classList.add('drop-hover');
+    });
+
+    blank.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.dataTransfer.dropEffect='move';
+      blank.classList.add('drop-hover');
+    });
+
+    blank.addEventListener('dragleave',()=>{
+      blank.classList.remove('drop-hover');
+    });
+
+    blank.addEventListener('drop',e=>{
+      e.preventDefault();
+      blank.classList.remove('drop-hover');
+      const chipId=e.dataTransfer.getData('text/plain');
+      const chip=document.getElementById(chipId);
+      placeChip(chip,blank);
+    });
+
+    blank.addEventListener('click',()=>{
+      if(selectedChip)placeChip(selectedChip,blank);
+    });
+
+    blank.addEventListener('dblclick',()=>{
+      clearBlank(blank);
+    });
+  });
+
+  document.getElementById('checkPw').onclick=()=>{
+    let score=0;
+
+    blanks.forEach(b=>{
+      const ok=(b.dataset.filled||'').trim().toLowerCase()===
+               (b.dataset.answer||'').trim().toLowerCase();
+      b.style.borderColor=ok?'#15803d':'#b91c1c';
+      if(ok)score++;
+    });
+
+    const st=document.getElementById('pwStatus');
+    st.className='status show '+(score===blanks.length?'ok':'bad');
+    st.textContent=`Skor: ${score}/${blanks.length}`+
+      (score===blanks.length
+        ?' — Bagus! Semua penanda wacana tepat.'
+        :' — Cuba pindahkan penanda wacana yang masih salah. Perhatikan urutan perenggan.');
+  };
+
+  document.getElementById('resetPw').onclick=()=>renderExercise();
+}
+function renderRearrange(ex,area){const sentences=sentencesFromEssay(ex.text),shuffled=[...sentences].sort(()=>Math.random()-.5);area.innerHTML=`<div class="note"><b>Arahan:</b> Seret ayat supaya menjadi karangan yang lengkap dan tersusun.<br><span class="small">说明：拖动句子，把它们排列成一篇完整并有条理的作文。</span></div>${essayImageHtml(ex)}<div class="sentence-list" id="sentenceList" style="margin-top:14px">${shuffled.map((s,i)=>`<div class="sentence" draggable="true" data-text="${escapeHtml(s)}"><span class="handle">⋮⋮</span><span class="num">${i+1}</span><span>${escapeHtml(s)}</span></div>`).join('')}</div><div class="row" style="margin-top:14px"><button class="btn primary" id="checkOrder">Semak Susunan</button><button class="btn" id="shuffleAgain">Kocok Semula</button></div><div id="orderStatus" class="status"></div>`;const list=document.getElementById('sentenceList');let dragEl=null;list.querySelectorAll('.sentence').forEach(el=>{el.addEventListener('dragstart',()=>{dragEl=el;el.classList.add('dragging')});el.addEventListener('dragend',()=>{el.classList.remove('dragging');dragEl=null;[...list.children].forEach((x,i)=>x.querySelector('.num').textContent=i+1)});el.addEventListener('dragover',e=>{e.preventDefault();const els=[...list.querySelectorAll('.sentence:not(.dragging)')];const after=els.reduce((closest,child)=>{const box=child.getBoundingClientRect(),offset=e.clientY-box.top-box.height/2;return offset<0&&offset>closest.offset?{offset,element:child}:closest},{offset:Number.NEGATIVE_INFINITY}).element;if(!after)list.appendChild(dragEl);else list.insertBefore(dragEl,after)})});document.getElementById('checkOrder').onclick=()=>{const now=[...list.children].map(x=>x.dataset.text);let good=0;now.forEach((s,i)=>{if(s===sentences[i])good++});const st=document.getElementById('orderStatus');st.className='status show '+(good===sentences.length?'ok':'bad');st.textContent=`Betul pada kedudukan: ${good}/${sentences.length}`+(good===sentences.length?' — Susunan tepat!':' — Perhatikan penanda wacana dan urutan peristiwa.')};document.getElementById('shuffleAgain').onclick=()=>renderExercise()}
+function renderGuided(ex,area){
+  const pars=paragraphsFromEssay(ex.text);
+  area.innerHTML=`
+    <div class="note">
+      <b>Arahan:</b> Gunakan kata kunci untuk membina karangan lengkap. Tulis dalam bentuk perenggan.
+      <br><span class="small">说明：根据关键词写出完整作文，并分段书写。完成后按“Semak & Beri Markah”。</span>
+    </div>
+    ${essayImageHtml(ex)}
+    ${pars.map((p,i)=>{
+      const label=i===0?'Pendahuluan':i===pars.length-1?'Penutup':`Isi ${i}`;
+      const kws=keywordizeParagraph(p);
+      return `<div class="keyword-box"><b>${label}</b>${kws.map(k=>`<span class="pill" style="margin:3px;display:inline-block">${escapeHtml(k)}</span>`).join('')}</div>`;
+    }).join('')}
+    <textarea class="writing-area" id="guidedText" placeholder="Tulis karangan di sini..."></textarea>
+    <div class="scorebox">
+      <div class="scoreitem"><strong id="guidedWords">0</strong><span>patah perkataan</span></div>
+      <div class="scoreitem"><strong id="guidedParas">0</strong><span>perenggan</span></div>
+      <div class="scoreitem"><strong id="guidedLinks">0</strong><span>penanda wacana</span></div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn grade-btn" id="gradeGuided">Semak & Beri Markah 评分</button>
+      <button class="btn soft" id="showModel">Lihat Contoh Esei</button>
+    </div>
+    <div id="guidedGrade"></div>
+    <div id="modelBox" class="note hidden" style="margin-top:12px;white-space:pre-line"></div>`;
+
+  const ta=document.getElementById('guidedText');
+  ta.oninput=()=>updateWritingStats(ta.value,'guided');
+
+  document.getElementById('gradeGuided').onclick=()=>{
+    const name=requireStudentName();
+    if(!name)return;
+    const value=ta.value.trim();
+    if(!value){alert('Tulis karangan dahulu. 请先完成作文。');return;}
+    const g=gradeEssay(ex,value,'guided');
+    document.getElementById('guidedGrade').innerHTML=gradePanelHtml(g);
+    saveWritingResult(ex,'guided',value,g);
+  };
+
+  document.getElementById('showModel').onclick=()=>{
+    const mb=document.getElementById('modelBox');
+    mb.textContent=stripMarkdown(ex.text);
+    mb.classList.toggle('hidden');
+  };
+}
+function renderIndependent(ex,area){
+  area.innerHTML=`
+    <div class="note">
+      <b>Arahan:</b> Tulis karangan lengkap tanpa melihat contoh. Pastikan ada pendahuluan, tiga isi dan penutup.
+      <br><span class="small">说明：独立完成作文。作文须有开头、三个内容段和结尾。完成后按“Semak & Beri Markah”。</span>
+    </div>
+    ${essayImageHtml(ex)}
+    <textarea class="writing-area" id="independentText" placeholder="Mulakan karangan anda..."></textarea>
+    <div class="scorebox">
+      <div class="scoreitem"><strong id="independentWords">0</strong><span>patah perkataan</span></div>
+      <div class="scoreitem"><strong id="independentParas">0</strong><span>perenggan</span></div>
+      <div class="scoreitem"><strong id="independentLinks">0</strong><span>penanda wacana</span></div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn grade-btn" id="gradeIndependent">Semak & Beri Markah 评分</button>
+      <button class="btn soft" id="revealModel">Banding dengan Contoh</button>
+    </div>
+    <div id="independentGrade"></div>
+    <div id="modelBox2" class="note hidden" style="margin-top:12px;white-space:pre-line"></div>`;
+
+  const ta=document.getElementById('independentText');
+  ta.oninput=()=>updateWritingStats(ta.value,'independent');
+
+  document.getElementById('gradeIndependent').onclick=()=>{
+    const name=requireStudentName();
+    if(!name)return;
+    const value=ta.value.trim();
+    if(!value){alert('Tulis karangan dahulu. 请先完成作文。');return;}
+    const g=gradeEssay(ex,value,'independent');
+    document.getElementById('independentGrade').innerHTML=gradePanelHtml(g);
+    saveWritingResult(ex,'independent',value,g);
+  };
+
+  document.getElementById('revealModel').onclick=()=>{
+    const mb=document.getElementById('modelBox2');
+    mb.textContent=stripMarkdown(ex.text);
+    mb.classList.toggle('hidden');
+  };
+}
+function countWords(t){return(t.trim().match(/\S+/g)||[]).length}function countLinks(t){const links=['mula-mula','seterusnya','selain itu','kemudian','akhirnya','kesimpulannya','pertama','di samping itu'];const low=t.toLowerCase();return links.reduce((n,x)=>n+(low.includes(x)?1:0),0)}function updateWritingStats(text,prefix){document.getElementById(prefix+'Words').textContent=countWords(text);document.getElementById(prefix+'Paras').textContent=text.trim()?text.split(/\n\s*\n/).filter(Boolean).length:0;document.getElementById(prefix+'Links').textContent=countLinks(text)}
+document.getElementById('studentModeBtn').onclick=()=>{document.body.classList.remove('teacher-mode');studentModeBtn.classList.add('primary');teacherModeBtn.classList.remove('primary')};document.getElementById('teacherModeBtn').onclick=()=>{document.body.classList.add('teacher-mode');teacherModeBtn.classList.add('primary');studentModeBtn.classList.remove('primary')};
+document.getElementById('levelTabs').onclick=e=>{if(!e.target.classList.contains('tab'))return;currentLevel=Number(e.target.dataset.level);document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===e.target));renderExercise()};document.getElementById('essaySelect').onchange=e=>{currentId=e.target.value;renderExercise()};
+document.getElementById('buildBtn').onclick=()=>{const title=essayTitle.value.trim(),text=essayInput.value.trim();if(!title||!text){alert('Masukkan tajuk dan esei.');return}const editingId=essayTitle.dataset.editingId||'';const obj={id:editingId||uid(),title,text,theme:themeInput.value.trim(),target:wordTarget.value,image:pendingImageData||''};if(editingId){const idx=library.findIndex(x=>x.id===editingId);if(idx>=0)library[idx]=obj;else library.unshift(obj)}else{library.unshift(obj)}currentId=obj.id;delete essayTitle.dataset.editingId;persist();renderAll();alert(editingId?'Latihan berjaya dikemas kini.':'Latihan berjaya dihasilkan.')};document.getElementById('saveEssayBtn').onclick=()=>{persist();alert('Disimpan pada peranti ini.')};
+
+document.getElementById('essayImageInput').addEventListener('change',async e=>{
+  const file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith('image/')){alert('Sila pilih fail imej.');e.target.value='';return;}
+  if(file.size>12*1024*1024){alert('Imej terlalu besar. Sila pilih imej di bawah 12 MB.');e.target.value='';return;}
+  try{
+    const data=await resizeImageFile(file);
+    setImagePreview(data);
+  }catch{
+    alert('Imej tidak dapat dibaca.');
+  }
+});
+document.getElementById('removeImageBtn').onclick=()=>{
+  document.getElementById('essayImageInput').value='';
+  setImagePreview('');
+};
+
+document.getElementById('demoBtn').onclick=()=>{setImagePreview('');document.getElementById('essayImageInput').value='';delete essayTitle.dataset.editingId;essayTitle.value='Sambutan Hari Jadi Kakak';themeInput.value='Tema 1 – Harmoni Sentiasa';essayInput.value=`Pada hari Ahad yang lalu, keluarga saya **mengadakan sambutan hari jadi kakak** di rumah. Kami berasa gembira kerana dapat meraikannya bersama-sama.\n\nMula-mula, saya dan adik **menghias ruang tamu** agar suasana lebih ceria. Kami **menggantung belon, reben dan kad ucapan** pada dinding.\n\nSeterusnya, ibu **menyediakan makanan dan kek hari jadi** untuk dinikmati bersama-sama. Saya **membantu ibu menyusun makanan di atas meja**.\n\nSelain itu, ayah **memberikan hadiah kepada kakak** sebagai tanda kasih sayang. Kami **menyanyikan lagu hari jadi** sebelum kakak meniup lilin dan memotong kek.\n\nKesimpulannya, kami berasa sangat gembira dapat meraikan hari istimewa kakak bersama-sama. Sambutan itu **menjadi kenangan manis buat keluarga kami**.`};
+window.removeEssay=id=>{if(!confirm('Padam latihan ini?'))return;library=library.filter(x=>x.id!==id);if(essayTitle.dataset.editingId===id){delete essayTitle.dataset.editingId;setImagePreview('')}currentId=library[0]?.id||null;persist();renderAll()};window.editEssay=id=>{const x=library.find(y=>y.id===id);if(!x)return;essayTitle.value=x.title;essayTitle.dataset.editingId=id;essayInput.value=x.text;themeInput.value=x.theme||'';wordTarget.value=x.target||'80–100 patah perkataan';document.getElementById('essayImageInput').value='';setImagePreview(x.image||'');window.scrollTo({top:0,behavior:'smooth'})};
+document.getElementById('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(library,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='latihan-esei-tahun4.json';a.click();URL.revokeObjectURL(a.href)};document.getElementById('importInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data))throw new Error();library=data;currentId=library[0]?.id||null;persist();renderAll();alert('Import berjaya.')}catch{alert('Fail JSON tidak sah.')}};
+
+document.getElementById('saveStudentNameBtn').onclick=()=>{
+  const input=document.getElementById('studentNameInput');
+  const name=input.value.trim();
+  if(!name){alert('Sila masukkan nama. 请输入姓名。');input.focus();return;}
+  localStorage.setItem(STUDENT_NAME_KEY,name);
+  input.style.borderColor='';
+  document.getElementById('studentNameStatus').textContent=`Disimpan sebagai: ${name}`;
+};
+document.getElementById('studentNameInput').addEventListener('change',e=>{
+  const name=e.target.value.trim();
+  if(name)localStorage.setItem(STUDENT_NAME_KEY,name);
+});
+
+document.getElementById('exportResultsBtn').onclick=()=>{
+  if(!results.length){alert('Belum ada rekod markah.');return;}
+  const rows=[
+    ['Nama','Tajuk','Mod','Markah','Patah Perkataan','Tarikh/Masa','Karangan'],
+    ...results.map(r=>[
+      r.name,r.title,r.mode,r.score,r.words,
+      new Date(r.createdAt).toLocaleString('ms-MY'),r.text
+    ])
+  ];
+  const csv='\ufeff'+rows.map(row=>row.map(csvEscape).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='rekod-markah-esei.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById('clearResultsBtn').onclick=()=>{
+  if(!results.length)return;
+  if(!confirm('Padam semua rekod markah pada peranti ini?'))return;
+  results=[];
+  persistResults();
+  renderResults();
+};
+
+loadLibrary();
+</script>
+</body></html>
