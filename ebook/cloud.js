@@ -81,7 +81,8 @@ async function cloudInit() {
   cloudBadge('Menyambung ke Google Sheets…', null);
   try {
     const rows = await cloudGetList();
-    essays = mergeCloudEssays(essays, rows);
+    // Cloud is canonical. Start from the built-in essays, not stale localStorage data.
+    essays = mergeCloudEssays(JSON.parse(JSON.stringify(seedEssays)), rows);
     saveData();
     if (!essays.some(x=>x.id===currentId)) currentId = essays[0]?.id || '';
     renderStudent();
