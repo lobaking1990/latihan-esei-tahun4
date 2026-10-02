@@ -6,6 +6,22 @@ const localDeleteById = deleteById;
 const localNewEssay = newEssay;
 const localLoadEditor = loadEditor;
 
+function driveDisplayUrl(fileId, fallback='') {
+  const id=String(fileId||'').trim();
+  return id ? `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w2000` : String(fallback||'');
+}
+
+function imagePlaceholder() {
+  return '<div class="image-placeholder"><b>Grafik belum dimuat naik</b>Guru boleh menambah atau memuat naik semula imej melalui Mod Guru.</div>';
+}
+
+document.addEventListener('error', e=>{
+  const img=e.target;
+  if(!(img instanceof HTMLImageElement)) return;
+  if(img.closest('#imageWrap')) img.closest('#imageWrap').innerHTML=imagePlaceholder();
+  if(img.closest('#imagePreview')) img.closest('#imagePreview').innerHTML='<span style="color:#8b96a3">Imej tidak dapat dipaparkan. Muat naik semula jika perlu.</span>';
+}, true);
+
 function cloudBadge(message, ok) {
   let el = document.getElementById('cloudStatusBadge');
   if (!el) {
@@ -22,13 +38,15 @@ function cloudBadge(message, ok) {
 }
 
 function cloudToEssay(x) {
+  const fileId=String(x.imageFileId||'').trim();
   return {
     id: String(x.id || ''),
     title: String(x.title || ''),
     theme: String(x.theme || ''),
     standard: String(x.standard || ''),
     easy: String(x.easy || ''),
-    image: String(x.imageUrl || ''),
+    imageFileId: fileId,
+    image: driveDisplayUrl(fileId, x.imageUrl),
     active: x.active !== false
   };
 }
@@ -40,7 +58,7 @@ function mergeCloudEssays(base, cloudRows) {
     if (!x.id) return;
     if (raw.active === false) { map.delete(x.id); return; }
     const old = map.get(x.id) || {};
-    map.set(x.id, {...old, ...x, image: x.image || old.image || ''});
+    map.set(x.id, {...old, ...x, image: x.image || ''});
   });
   return [...map.values()];
 }
@@ -81,7 +99,6 @@ async function cloudInit() {
   cloudBadge('Menyambung ke Google Sheets…', null);
   try {
     const rows = await cloudGetList();
-    // Cloud is canonical. Start from the built-in essays, not stale localStorage data.
     essays = mergeCloudEssays(JSON.parse(JSON.stringify(seedEssays)), rows);
     saveData();
     if (!essays.some(x=>x.id===currentId)) currentId = essays[0]?.id || '';
@@ -147,7 +164,7 @@ async function cloudSaveEditor() {
     setStatus('Menyimpan ke Google Sheets…', true);
     const data=await cloudPost({action:'save', pin:teacherPin(), essay, imageData:isDataImage?currentImage:''});
     const saved=cloudToEssay(data.essay||{});
-    const obj={id:saved.id||id,title:saved.title||title,theme:saved.theme||theme,easy:saved.easy||easy,standard:saved.standard||standard,image:saved.image||''};
+    const obj={id:saved.id||id,title:saved.title||title,theme:saved.theme||theme,easy:saved.easy||easy,standard:saved.standard||standard,image:saved.image||'',imageFileId:saved.imageFileId||''};
     const i=essays.findIndex(x=>x.id===obj.id);
     if(i>=0) essays[i]=obj; else essays.push(obj);
     currentEditId=obj.id;
