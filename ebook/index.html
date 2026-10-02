@@ -18,12 +18,12 @@
 
 <section id="teacherView" class="hidden">
   <div class="teacher-shell">
-    <aside class="teacher-side"><div class="teacher-top"><button id="newEssayBtn" class="btn primary small">＋ Karangan Baharu</button><button id="exportBtn" class="btn small">Export</button><label class="btn small" style="cursor:pointer">Import<input id="importInput" type="file" accept="application/json" hidden></label></div><div class="teacher-note">Data guru disimpan pada pelayar ini. Export fail JSON sebagai salinan sandaran.</div><div id="teacherList" class="teacher-list"></div></aside>
+    <aside class="teacher-side"><div class="teacher-top"><button id="newEssayBtn" class="btn primary small">＋ Karangan Baharu</button><button id="exportBtn" class="btn small">Export</button><label class="btn small" style="cursor:pointer">Import<input id="importInput" type="file" accept="application/json" hidden></label></div><div class="teacher-note">Apabila cloud aktif, simpan/edit/padam akan diselaraskan melalui Google Sheets dan gambar dimuat naik ke Google Drive.</div><div id="teacherList" class="teacher-list"></div></aside>
     <section class="teacher-editor"><h2>Editor Karangan</h2><div class="teacher-note">Isi sekurang-kurangnya satu versi. Jika versi Mudah atau Standard kosong, sistem akan menjana draf automatik untuk versi yang hilang. Guru masih boleh menyunting draf sebelum menyimpan.</div>
       <div class="form-grid">
         <div class="field"><label>Tajuk</label><input id="fTitle" placeholder="Contoh: Hari Kantin"></div>
         <div class="field"><label>Tema</label><input id="fTheme" placeholder="Contoh: Keusahawanan dan Pengurusan Kewangan"></div>
-        <div class="field full"><label>Grafik / Imej</label><div class="image-upload"><input id="fImage" type="file" accept="image/*"><div class="teacher-note">Imej akan disimpan dalam data eBook pada pelayar. Disyorkan JPG/PNG/WebP bawah 2 MB.</div><div id="imagePreview" class="image-preview"><span style="color:#8b96a3">Tiada imej dipilih</span></div><button id="removeImageBtn" type="button" class="btn danger small" style="margin-top:8px">Buang Imej</button></div></div>
+        <div class="field full"><label>Grafik / Imej</label><div class="image-upload"><input id="fImage" type="file" accept="image/*"><div class="teacher-note">JPG/PNG/WebP disyorkan. Imej besar akan dikecilkan secara automatik sebelum dimuat naik ke Drive.</div><div id="imagePreview" class="image-preview"><span style="color:#8b96a3">Tiada imej dipilih</span></div><button id="removeImageBtn" type="button" class="btn danger small" style="margin-top:8px">Buang Imej</button></div></div>
         <div class="field"><label>Versi Mudah</label><textarea id="fEasy" placeholder="Ayat pendek dan mudah untuk murid lemah. Pisahkan perenggan dengan satu baris kosong."></textarea><div id="easyAuto" class="auto-box hidden">Versi Mudah ini dijana secara automatik. Semak dan ubah jika perlu.</div></div>
         <div class="field"><label>Versi Standard</label><textarea id="fStandard" placeholder="Karangan standard sekitar 80–100 patah perkataan. Pisahkan perenggan dengan satu baris kosong."></textarea><div id="standardAuto" class="auto-box hidden">Versi Standard ini dijana secara automatik. Semak dan ubah jika perlu.</div></div>
       </div>
@@ -38,5 +38,7 @@
 <div id="toast" class="toast"></div>
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script src="config.js"></script>
+<script src="cloud.js"></script>
 </body>
 </html>
